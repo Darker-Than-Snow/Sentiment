@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results for {{ bank_name }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .chart, .summary, .words, .samples, .table-container {
+            margin-bottom: 20px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            background: #f9f9f9;
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        table th {
+            background-color: #f2f2f2;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Analysis Results for {{ bank_name }}</h1>
+    </header>
+    <main class="container">
+        {% if error_message %}
+        <div class="error-message">{{ error_message }}</div>
+        {% else %}
+        <section class="chart">
+            <h2>Sentiment Distribution</h2>
+            <img src="data:image/png;base64,{{ plot_url }}" alt="Sentiment Distribution">
+        </section>
+        <section class="summary">
+            <h3>Total Tweets: {{ total_tweets }}</h3>
+            <h3>Sentiment Breakdown:</h3>
+            <ul>
+                <li>Positive: {{ positive_percentage }}% ({{ sentiment_counts.get('Excellent', 0) + sentiment_counts.get('Good', 0) }} tweets)</li>
+                <li>Neutral: {{ neutral_percentage }}% ({{ sentiment_counts.get('Neutral', 0) }} tweets)</li>
+                <li>Negative: {{ negative_percentage }}% ({{ sentiment_counts.get('Poor', 0) }} tweets)</li>
+            </ul>
+            <h3>Overall Rating: {{ rating }}</h3>
+        </section>
+        <section class="words">
+            <h3>Most Common Positive Words:</h3>
+            <ul>
+                {% for word, count in positive_words %}
+                <li>{{ word }}: {{ count }}</li>
+                {% endfor %}
+            </ul>
+            <h3>Most Common Negative Words:</h3>
+            <ul>
+                {% for word, count in negative_words %}
+                <li>{{ word }}: {{ count }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+        <section class="samples">
+            <h3>Sample Positive Tweets:</h3>
+            <ul>
+                {% for tweet in positive_samples %}
+                <li>{{ tweet }}</li>
+                {% endfor %}
+            </ul>
+            <h3>Sample Negative Tweets:</h3>
+            <ul>
+                {% for tweet in negative_samples %}
+                <li>{{ tweet }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+        <section class="table-container">
+            <h2>Detailed Tweet Data</h2>
+            {{ tables|safe }}
+        </section>
+        {% endif %}
+        <a href="/">Upload Another File</a>
+    </main>
+</body>
+</html>

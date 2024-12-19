@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Sentiment Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Bank Sentiment Analysis</h1>
+    </header>
+    <main class="container">
+        <form class="upload-form" action="/upload" method="post" enctype="multipart/form-data">
+            <h2>Upload CSV File</h2>
+            <input type="file" name="file" accept=".csv" required><br>
+            <h2>Enter Bank Name</h2>
+            <input type="text" name="bank_name" placeholder="Enter bank name" required><br>
+            <button type="submit">Analyze</button>
+        </form>
+    </main>
+</body>
+</html>

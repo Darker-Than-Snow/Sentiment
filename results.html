@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results for {{ bank_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Analysis Results for {{ bank_name }}</h1>
+    </header>
+    <main class="container">
+        {% if error_message %}
+        <div class="error-message">{{ error_message }}</div>
+        {% else %}
+        <section class="chart">
+            <h2>Sentiment Distribution</h2>
+            <img src="data:image/png;base64,{{ plot_url }}" alt="Sentiment Distribution">
+        </section>
+        <section class="summary">
+            <h3>Total Tweets: {{ total_tweets }}</h3>
+            <h3>Sentiment Breakdown:</h3>
+            <ul>
+                <li>Positive: {{ positive_percentage }}% ({{ sentiment_counts.get('Positive', 0) }} tweets)</li>
+                <li>Neutral: {{ neutral_percentage }}% ({{ sentiment_counts.get('Neutral', 0) }} tweets)</li>
+                <li>Negative: {{ negative_percentage }}% ({{ sentiment_counts.get('Negative', 0) }} tweets)</li>
+            </ul>
+            <h3>Overall Rating: {{ rating }}</h3>
+        </section>
+        <section class="words">
+            <h3>Most Common Positive Words:</h3>
+            <ul>
+                {% for word, count in positive_words %}
+                <li>{{ word }}: {{ count }}</li>
+                {% endfor %}
+            </ul>
+            <h3>Most Common Negative Words:</h3>
+            <ul>
+                {% for word, count in negative_words %}
+                <li>{{ word }}: {{ count }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+        <section class="samples">
+            <h3>Sample Positive Tweets:</h3>
+            <ul>
+                {% for tweet in positive_samples %}
+                <li>{{ tweet }}</li>
+                {% endfor %}
+            </ul>
+            <h3>Sample Negative Tweets:</h3>
+            <ul>
+                {% for tweet in negative_samples %}
+                <li>{{ tweet }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+        <section class="table-container">
+            <h2>Detailed Tweet Data</h2>
+            {{ tables|safe }}
+        </section>
+        {% endif %}
+        <a href="/">Upload Another File</a>
+    </main>
+</body>
+</html>
